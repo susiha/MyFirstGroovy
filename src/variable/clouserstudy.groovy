@@ -67,7 +67,7 @@ package variable
 //
 //println clouser.call('sunshihai')
 /***
- * ========================================================闭包基础===============================================================
+ * ========================================================闭包使用===============================================================
  */
 
 /**
@@ -122,5 +122,159 @@ package variable
  */
 
 
+String str = 'the 2 and 3 is 5'
+
+/**
+ * each的遍历 each 使用的是while循环遍历  multiply方法是把temp变成指定的倍数 each 方法的返回值是调用者本身
+ */
+
+//str.each {
+//    String temp -> print temp.multiply(2)
+//}
+
+/**
+ *  find 查找符合条件的的第一个，必须有返回值
+ */
 
 
+//str.find {
+//    String s -> s.isNumber()
+//        return s
+//}
+
+/**
+ *  findAll 查找符合条件的所有值，返回值是集合
+ */
+
+//str.findAll {
+//    String s -> s.isNumber()
+//        return s
+//}
+
+
+/**
+ * any 方法返回boolean 类型 ，只要有一项满足闭包条件的就会返回true
+ */
+//str.any {
+//
+//    String s -> s.isNumber()
+//        return s
+//}
+
+/**
+ *  every 方法与any基本类似 都满足闭包条件的时候 才会返回true
+ */
+//str.every {
+//    String s -> s.isNumber()
+//        return s
+//}
+
+/**
+ *  返回值是List ,该方法是将str的字符遍历然后按照闭包的规则转换之后 放入到ArrayList中返回
+ */
+//str.collect {
+//    it.toUpperCase()
+//}
+
+
+/***
+ * ========================================================闭包进阶===============================================================
+ */
+
+/**
+ * 闭包三个关键变量 this,owner,delegate
+ *
+ * this 代表闭包定义处的类
+ *
+ * owner 代表闭包定义处的类或者对象
+ *
+ * delegate 代表任意对象 默认与owner一致
+ */
+
+//def scriptClouser = {
+//    println "scriptClouser this :" +this
+//    println "scriptClouser owner :" +owner
+//    println "scriptClouser delegate :" +delegate
+//
+//}
+//scriptClouser.call()
+//返回值
+///scriptClouser this :variable.clouserstudy@6f46426d
+//scriptClouser owner :variable.clouserstudy@6f46426d
+//scriptClouser delegate :variable.clouserstudy@6f46426d
+
+
+//class Person{
+//
+//    def static classClouser ={
+//        println "classClouser this :" +this
+//        println "classClouser owner :" +owner
+//        println "classClouser delegate :" +delegate
+//    }
+//
+//
+//    def static say(){
+//        def  classClouser ={
+//            println "MethodclassClouser this :" +this
+//            println "MethodclassClouser owner :" +owner
+//            println "MethodclassClouser delegate :" +delegate
+//        }
+//
+//        classClouser.call()
+//    }
+//
+//}
+//
+//Person.classClouser.call()
+//Person.say()
+
+
+class Person{
+
+    def  classClouser ={
+        println "classClouser this :" +this
+        println "classClouser owner :" +owner
+        println "classClouser delegate :" +delegate
+    }
+
+
+    def  say(){
+        def  classClouser ={
+            println "MethodclassClouser this :" +this
+            println "MethodclassClouser owner :" +owner
+            println "MethodclassClouser delegate :" +delegate
+        }
+
+        classClouser.call()
+    }
+
+}
+//
+Person person = new Person()
+//person.classClouser.call()
+//person.say()
+//
+
+// 在闭包中定义闭包
+
+
+def clouser = {
+
+
+
+    def innerClouser ={
+
+        println "innerClouser this :" +this
+        println "innerClouser owner :" +owner
+        println "innerClouser delegate :" +delegate
+    }
+    innerClouser.delegate = person //修改默认的delegate
+
+    innerClouser.call()
+    println "outerClouser this :" +this
+    println "outerClouser owner :" +owner
+    println "outerClouser delegate :" +delegate
+
+}
+
+clouser.call()
