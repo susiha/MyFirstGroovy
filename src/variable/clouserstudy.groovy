@@ -258,23 +258,72 @@ Person person = new Person()
 // 在闭包中定义闭包
 
 
-def clouser = {
+//def clouser = {
+//
+//
+//
+//    def innerClouser ={
+//
+//        println "innerClouser this :" +this
+//        println "innerClouser owner :" +owner
+//        println "innerClouser delegate :" +delegate
+//    }
+//    innerClouser.delegate = person //修改默认的delegate
+//
+//    innerClouser.call()
+//    println "outerClouser this :" +this
+//    println "outerClouser owner :" +owner
+//    println "outerClouser delegate :" +delegate
+//
+//}
+//
+//clouser.call()
 
 
+/**
+ * 闭包的委托策略
+ */
 
-    def innerClouser ={
 
-        println "innerClouser this :" +this
-        println "innerClouser owner :" +owner
-        println "innerClouser delegate :" +delegate
+class Student{
+    String name
+    def pretty = {
+
+        "my Name is ${name}"
     }
-    innerClouser.delegate = person //修改默认的delegate
 
-    innerClouser.call()
-    println "outerClouser this :" +this
-    println "outerClouser owner :" +owner
-    println "outerClouser delegate :" +delegate
-
+    String toString(){
+        pretty.call()
+    }
 }
 
-clouser.call()
+
+class Teacher{
+    String name
+}
+
+
+
+
+Student student = new Student(name: 'sarash')
+
+Teacher teacher = new Teacher(name: 'Qndroid')
+
+println student.toString()
+
+
+/**
+ * 只修改delegate并不会起作用
+ */
+student.pretty.delegate = teacher
+
+println student.toString()
+
+/**
+ * 修改委托策略  DELEGATE_FIRST 先去指定的delegate 查找 name  如果有的话 直接使用 如果没有的话 再去使用闭包owner的name
+ * DELEGATE_Only 表示直接使用指定的delegate的那么 如果不存在 就会直接报错
+ */
+student.pretty.resolveStrategy = Closure.DELEGATE_FIRST
+
+
+println student.toString()
